@@ -20,6 +20,7 @@ function Home({ plans }) {
     <div>
       <Head>
         <title>PrtonMail Plans</title>
+        <meta name="description" content="Subscription plans for ProtonMail" />
         <link rel="icon" href="/favicon.ico" />
         <link
           href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"

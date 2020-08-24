@@ -1,65 +1,82 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import Head from "next/head";
+import { useState } from "react";
+import fetch from "isomorphic-unfetch";
 
-export default function Home() {
+import Plans from "../component/Plans";
+
+function Home({ plans }) {
+  const [currencies, setCurrencies] = useState([
+    { value: "EUR", name: "Euro", symbol: "€" },
+    { value: "CHF", name: "Franc", symbol: "CHf" },
+    { value: "USD", name: "Dollar", symbol: "$" },
+  ]);
+  const [subTypes, setSubTypes] = useState([
+    { name: "Monthly", value: 1 },
+    { name: "Annually", value: 12 },
+    { name: "2 years", value: 24 },
+  ]);
+
   return (
-    <div className={styles.container}>
+    <div>
       <Head>
-        <title>Create Next App</title>
+        <title>PrtonMail Plans</title>
         <link rel="icon" href="/favicon.ico" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
+          rel="stylesheet"
+        ></link>
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
+      <main>
+        <Plans Plans={plans} Currencies={currencies} SubTypes={subTypes} />
       </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
     </div>
-  )
+  );
 }
+
+export async function getStaticProps(context) {
+  const headers = new Headers();
+
+  headers.append("Content-Type", "application/json;charset=utf-8");
+  headers.append("x-pm-appversion", "Other");
+  headers.append("x-pm-apiversion", "3");
+  headers.append("Accept", "application/vnd.protonmail.v1+json");
+
+  const reqParams = {
+    method: "GET",
+    headers: headers,
+    mode: "cors",
+    cache: "default",
+  };
+
+  const responseEUR = await fetch(
+    `https://api.protonmail.ch/payments/plans?Currency=EUR`,
+    reqParams
+  );
+  const responseUSD = await fetch(
+    `https://api.protonmail.ch/payments/plans?Currency=USD`,
+    reqParams
+  );
+  const responseCHF = await fetch(
+    `https://api.protonmail.ch/payments/plans?Currency=CHF`,
+    reqParams
+  );
+
+  const fullResultEUR = await responseEUR.json();
+  const fullResultUSD = await responseUSD.json();
+  const fullResultCHF = await responseCHF.json();
+
+  const fourPlans = {
+    EUR: fullResultEUR.Plans.splice(0, 4),
+    USD: fullResultUSD.Plans.splice(0, 4),
+    CHF: fullResultCHF.Plans.splice(0, 4),
+  };
+
+  return {
+    props: {
+      plans: fourPlans,
+    },
+  };
+}
+
+export default Home;

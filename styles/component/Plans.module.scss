@@ -1,0 +1,25 @@
+.plans {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 10px;
+  .plansContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+@media (min-width: 850px) {
+  .plans {
+    align-items: inherit;
+    font-size: 12px;
+    .plansContainer {
+      flex-direction: row;
+    }
+  }
+}

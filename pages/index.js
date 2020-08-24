@@ -19,7 +19,7 @@ function Home({ plans }) {
   return (
     <div>
       <Head>
-        <title>PrtonMail Plans</title>
+        <title>ProtonMail Plans</title>
         <meta name="description" content="Subscription plans for ProtonMail" />
         <link rel="icon" href="/favicon.ico" />
         <link

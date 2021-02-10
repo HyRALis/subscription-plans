@@ -6,14 +6,7 @@ const PlanProperty = ({ children }) => {
     <div className={styles.property}>
       <span>
         <span>
-          <ArrowSvg
-            style={{
-              width: "1rem",
-              height: "1rem",
-              "margin-right": "1rem",
-              fill: "currentColor",
-            }}
-          />
+          <ArrowSvg className={styles.arrowSvg} />
         </span>
         {children}
       </span>

@@ -5,5 +5,12 @@
   align-items: center;
   span {
     display: flex;
+    align-items: center;
+  }
+  .arrowSvg {
+    width: 1rem;
+    height: 1rem;
+    margin-right: 1rem;
+    fill: currentColor;
   }
 }
